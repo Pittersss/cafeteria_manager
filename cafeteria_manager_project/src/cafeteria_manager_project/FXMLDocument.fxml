@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="658.0" prefWidth="834.0" style="-fx-background-color: BLACK;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="cafeteria_manager_project.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="658.0" prefWidth="834.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cafeteria_manager_project.FXMLDocumentController">
    <children>
       <TabPane layoutY="-3.0" prefHeight="658.0" prefWidth="834.0" style="-fx-background-color: black;" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="300.0" tabMaxWidth="300.0" tabMinHeight="60.0" tabMinWidth="80.0">
          <tabs>
@@ -20,24 +20,24 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <Label layoutX="31.0" layoutY="529.0" prefHeight="48.0" prefWidth="126.0" text="VALOR TOTAL:" textFill="WHITE">
+                        <Label layoutX="31.0" layoutY="522.0" prefHeight="48.0" prefWidth="126.0" text="VALOR TOTAL:" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <ListView layoutX="544.0" layoutY="9.0" prefHeight="578.0" prefWidth="276.0" />
-                        <ChoiceBox layoutX="130.0" layoutY="16.0" prefHeight="34.0" prefWidth="162.0" style="-fx-background-color: grey;" />
-                        <TextField layoutX="164.0" layoutY="534.0" prefHeight="39.0" prefWidth="150.0" style="-fx-background-color: grey;">
+                        <ListView layoutX="544.0" layoutY="9.0" prefHeight="578.0" prefWidth="287.0" />
+                        <ChoiceBox fx:id="chBoxProdutos" layoutX="130.0" layoutY="16.0" prefHeight="34.0" prefWidth="162.0" style="-fx-background-color: grey;" />
+                        <TextField fx:id="txtValorTotal" layoutX="164.0" layoutY="527.0" prefHeight="39.0" prefWidth="150.0" style="-fx-background-color: grey;">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </TextField>
-                        <Button layoutX="31.0" layoutY="471.0" mnemonicParsing="false" text="ADICIONAR">
+                        <Button fx:id="btn_c_add" layoutX="31.0" layoutY="423.0" mnemonicParsing="false" onAction="#btn_c_AddClicked" prefHeight="79.0" prefWidth="126.0" text="ADICIONAR">
                            <font>
                               <Font name="System Bold Italic" size="18.0" />
                            </font>
                         </Button>
-                        <Button layoutX="194.0" layoutY="471.0" mnemonicParsing="false" text="REGISTRAR">
+                        <Button fx:id="btn_c_registrar" layoutX="417.0" layoutY="496.0" mnemonicParsing="false" onAction="#btn_c_RegistrarClicked" prefHeight="81.0" prefWidth="120.0" text="REGISTRAR" textFill="RED">
                            <font>
                               <Font name="System Bold Italic" size="18.0" />
                            </font>
@@ -50,20 +50,59 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TabPane layoutX="6.0" layoutY="29.0" prefHeight="560.0" prefWidth="827.0" style="-fx-background-color: white;" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="300.0" tabMaxWidth="300.0" tabMinHeight="30.0" tabMinWidth="40.0">
-                          <tabs>
-                            <Tab text="Untitled Tab 1">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                              </content>
-                            </Tab>
-                            <Tab text="Untitled Tab 2">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                              </content>
-                            </Tab>
-                          </tabs>
-                        </TabPane>
+                        <TextField id="txtPesquisar" layoutX="14.0" layoutY="14.0" prefHeight="39.0" prefWidth="532.0" />
+                        <Button id="btnPesquisar" fx:id="btnPesquisar" layoutX="567.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnPesquisaClicked" prefHeight="39.0" prefWidth="117.0" text="PESQUISAR">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                        <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="61.0" prefHeight="528.0" prefWidth="391.0">
+                          <columns>
+                            <TableColumn fx:id="colNome" prefWidth="129.0" text="NOME" />
+                            <TableColumn fx:id="colValor" prefWidth="90.0" text="VALOR" />
+                              <TableColumn fx:id="colQuantidade" prefWidth="85.0" text="QUANTIDADE" />
+                              <TableColumn fx:id="colValidade" prefWidth="86.0" text="VALIDADE" />
+                          </columns>
+                        </TableView>
+                        <Label layoutX="417.0" layoutY="61.0" prefHeight="35.0" prefWidth="58.0" text="NOME:" textFill="WHITE">
+                           <font>
+                              <Font name="Calibri Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="417.0" layoutY="96.0" prefHeight="35.0" prefWidth="58.0" text="VALOR:" textFill="WHITE">
+                           <font>
+                              <Font name="Calibri Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="417.0" layoutY="131.0" prefHeight="35.0" prefWidth="110.0" text="QUANTIDADE:" textFill="WHITE">
+                           <font>
+                              <Font name="Calibri Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="417.0" layoutY="166.0" prefHeight="35.0" prefWidth="84.0" text="VALIDADE:" textFill="WHITE">
+                           <font>
+                              <Font name="Calibri Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField id="txtNome" fx:id="txtNome" layoutX="488.0" layoutY="66.0" prefHeight="25.0" prefWidth="207.0" />
+                        <TextField id="txtValor" fx:id="txtValor" layoutX="488.0" layoutY="101.0" prefHeight="25.0" prefWidth="207.0" />
+                        <TextField id="txtQuantidade" fx:id="txtQuantidade" layoutX="536.0" layoutY="136.0" prefHeight="25.0" prefWidth="207.0" />
+                        <TextField id="txtValidade" fx:id="txtValidade" layoutX="509.0" layoutY="171.0" prefHeight="25.0" prefWidth="116.0" promptText="dd/MM/yyyy" />
+                        <Button id="btnAdd" fx:id="btn_e_Add" layoutX="417.0" layoutY="492.0" mnemonicParsing="false" onAction="#btnAdd_e_Clicked" prefHeight="85.0" prefWidth="129.0" text="ADICIONAR">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Button>
+                        <Button id="btnEdit" fx:id="btn_e_Edit" layoutX="556.0" layoutY="492.0" mnemonicParsing="false" onAction="#btnEdit_e_Clicked" prefHeight="85.0" prefWidth="102.0" text="EDITAR">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Button>
+                        <Button id="btnRmv" fx:id="btn_e_Rmv" layoutX="667.0" layoutY="492.0" mnemonicParsing="false" onAction="#btnRmv_e_Clicked" prefHeight="85.0" prefWidth="118.0" text="REMOVER" textFill="RED">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Button>
                      </children>
                   </AnchorPane>
               </content>

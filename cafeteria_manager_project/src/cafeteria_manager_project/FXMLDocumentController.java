@@ -19,6 +19,8 @@ import javafx.scene.control.Label;
 public class FXMLDocumentController implements Initializable {
     
     @FXML
+    private ChoiceBox<String> chBoxProdutos;
+    @FXML
     private void clickBotao(ActionEvent event) {
     }
     
