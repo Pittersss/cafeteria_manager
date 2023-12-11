@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -38,6 +39,8 @@ public class FXMLDocumentController implements Initializable {
     private TextField txtValorTotal;
     @FXML
     private Button btn_c_add;
+    @FXML
+    private Label lbId;
     @FXML
     private Button btn_c_registrar;
     @FXML
@@ -118,6 +121,7 @@ public class FXMLDocumentController implements Initializable {
                 
                 if (produtos.get(i).getNome().equals(txtPesquisar.getText().toUpperCase()))
                 {
+                    lbId.setText(produtos.get(i).getId());
                     txtNome.setText(produtos.get(i).getNome());
                     txtValor.setText(produtos.get(i).getValor());
                     txtQuantidade.setText(produtos.get(i).getQuantidade());
@@ -138,7 +142,6 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void AdicionarEClicked(ActionEvent event) {
         Produto p = new Produto();
-        p.setId();
         p.setValor(txtValor.getText());
         p.setNome(txtNome.getText().toUpperCase());
         p.setValidade(txtValidade.getText());
@@ -155,14 +158,26 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void EditarEClicked(ActionEvent event) {
         ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutosManager().getProdutos());
-       
+        for(int i = 0; i < produtos.size(); i++)
+        {
+          if (produtos.get(i).getId().equals(lbId.getText())){
+              System.out.println("Aconteceu");
+              produtos.get(i).setNome(txtNome.getText());
+              produtos.get(i).setValor(txtValor.getText());
+              produtos.get(i).setQuantidade(txtQuantidade.getText());
+              produtos.get(i).setValidade(txtValidade.getText());
+              
+              tabelaProduto.refresh();
+              break;
+          }
+        }
         
          
     }
 
     @FXML
     private void RemoverEClicked(ActionEvent event) {
-        System.out.println("Funcionou");
+        
     }
 
     @FXML
@@ -179,6 +194,7 @@ public class FXMLDocumentController implements Initializable {
     private void tbProdutosClicked(MouseEvent event) {
         int i  = tabelaProduto.getSelectionModel().getSelectedIndex();
         Produto produto = (Produto)tabelaProduto.getItems().get(i);
+        lbId.setText(produto.getId());
         txtNome.setText(produto.getNome());
         txtValor.setText(produto.getValor());
         txtValidade.setText(produto.getValidade());

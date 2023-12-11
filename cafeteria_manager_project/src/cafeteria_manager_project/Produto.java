@@ -9,18 +9,16 @@ public class Produto {
     private String validade;
     private String quantidade;
     
+    public Produto()
+    {
+      base += 1;
+      this.id = String.valueOf(base);  
+    }
     public String getId()
     {
         return id;
     }
-    public String setId()
-    {
-      base += 1;
-      this.id = String.valueOf(base);
-      return this.id;
-          
-      
-    }
+    
     public String getValor()
     {
         return valor;

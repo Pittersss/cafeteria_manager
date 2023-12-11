@@ -126,6 +126,7 @@
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Button>
+                        <Label fx:id="lbId" layoutX="736.0" layoutY="25.0" prefHeight="31.0" prefWidth="47.0" textFill="WHITE" />
                      </children>
                   </AnchorPane>
               </content>
