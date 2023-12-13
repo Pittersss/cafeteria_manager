@@ -21,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.util.List;
 import java.util.ArrayList;
@@ -97,6 +98,11 @@ public class FXMLDocumentController implements Initializable {
     private void PreencherTabela()
     {
         ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutosManager().getProdutos());
+        for(int i = 0;i < produtos.size();i++)
+        {
+           
+           
+        }
         tabelaProduto.setItems(produtos);
     }
 
@@ -161,11 +167,11 @@ public class FXMLDocumentController implements Initializable {
         for(int i = 0; i < produtos.size(); i++)
         {
           if (produtos.get(i).getId().equals(lbId.getText())){
-              System.out.println("Aconteceu");
               produtos.get(i).setNome(txtNome.getText());
               produtos.get(i).setValor(txtValor.getText());
               produtos.get(i).setQuantidade(txtQuantidade.getText());
               produtos.get(i).setValidade(txtValidade.getText());
+              
               
               tabelaProduto.refresh();
               break;
@@ -177,17 +183,30 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void RemoverEClicked(ActionEvent event) {
+        ProdutosManager produtos = new ProdutosManager();
+        
+        for(int i = produtos.getProdutos().size()-1; i >= 0; i--)
+        {
+          if (produtos.getProdutos().get(i).getId().equals(lbId.getText())){
+              produtos.getProdutos().remove(i);
+              PreencherTabela();
+              break;
+          }
+        }
         
     }
 
     @FXML
     private void MaisUmEClicked(ActionEvent event) {
-        System.out.println("Funcionou");
+        txtQuantidade.setText(String.valueOf(Integer.parseInt(txtQuantidade.getText()) + 1));
     }
 
     @FXML
     private void MenosUmEClicked(ActionEvent event) {
-        System.out.println("Funcionou");
+        if(Integer.parseInt(txtQuantidade.getText()) > 0)
+        {
+          txtQuantidade.setText(String.valueOf(Integer.parseInt(txtQuantidade.getText()) - 1));
+        }        
     }
 
     @FXML
