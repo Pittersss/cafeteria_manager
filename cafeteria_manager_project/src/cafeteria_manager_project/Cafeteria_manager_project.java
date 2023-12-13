@@ -19,7 +19,7 @@ public class Cafeteria_manager_project extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument1.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument2.fxml"));
         
         Scene scene = new Scene(root);
         

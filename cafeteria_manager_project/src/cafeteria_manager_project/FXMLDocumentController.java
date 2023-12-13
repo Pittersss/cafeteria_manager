@@ -6,6 +6,7 @@
 package cafeteria_manager_project;
 
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,10 +22,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
+import java.util.Locale;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.concurrent.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.control.cell.PropertyValueFactory;
-import java.util.List;
-import java.util.ArrayList;
 import javafx.scene.input.MouseEvent;
 
 
@@ -86,22 +90,56 @@ public class FXMLDocumentController implements Initializable {
     
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb)  {
         // TODO
         colId.setCellValueFactory(new PropertyValueFactory<Produto, String>("id"));
         colNome.setCellValueFactory(new PropertyValueFactory<Produto, String>("nome"));
         colValor.setCellValueFactory(new PropertyValueFactory<Produto, String>("valor"));
         colValidade.setCellValueFactory(new PropertyValueFactory<Produto, String>("validade"));
         colQuantidade.setCellValueFactory(new PropertyValueFactory<Produto, String>("quantidade"));
-        PreencherTabela();
+        try {
+            PreencherTabela();
+        } catch (ParseException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    private void PreencherTabela()
+    private void PreencherTabela() throws ParseException
     {
         ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutosManager().getProdutos());
+        String status = "";
         for(int i = 0;i < produtos.size();i++)
         {
-           
-           
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+            Date hoje = new Date();
+            String atual = sdf.format(hoje);
+            Date today = sdf.parse(atual);
+            Date validade = sdf.parse(produtos.get(i).getValidade());
+            long diff = validade.getTime() - today.getTime();
+            TimeUnit time = TimeUnit.DAYS;
+            long diferenca = time.convert(diff, TimeUnit.MILLISECONDS);
+            if (diferenca >= 60)
+            {
+               status = " ✅";
+            }
+            else if (diferenca <= 45 && diferenca > 30)
+            {
+               status = " OK"; 
+            }
+            else{
+               status = " ❗";
+            }
+            String newValidade = produtos.get(i).getValidade();
+            if (newValidade.length() <= 10)
+            {
+               produtos.get(i).setValidade(newValidade + status); 
+            }
+            else
+            {
+                String newDate = newValidade.substring(0, 10);
+                produtos.get(i).setValidade(newDate + status);
+                
+            }
+               
         }
         tabelaProduto.setItems(produtos);
     }
@@ -118,7 +156,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void PesquisarEClicked(ActionEvent event) {
+    private void PesquisarEClicked(ActionEvent event) throws ParseException {
         ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutosManager().getProdutos());
         if (txtPesquisar.getText() != "")
         {
@@ -137,16 +175,11 @@ public class FXMLDocumentController implements Initializable {
             }
          
         }
-        else
-        {
-            PreencherTabela();
-        }
-            
-        
+         
     }
 
     @FXML
-    private void AdicionarEClicked(ActionEvent event) {
+    private void AdicionarEClicked(ActionEvent event) throws ParseException {
         Produto p = new Produto();
         p.setValor(txtValor.getText());
         p.setNome(txtNome.getText().toUpperCase());
@@ -155,14 +188,12 @@ public class FXMLDocumentController implements Initializable {
         new ProdutosManager().Adicionar(p);
         
         PreencherTabela();
-        txtValor.clear();
-        txtNome.clear();
-        txtQuantidade.clear();
-        txtValidade.clear();
+        PreencherOpcoesCaixa();
+        LimparCampos();
     }
 
     @FXML
-    private void EditarEClicked(ActionEvent event) {
+    private void EditarEClicked(ActionEvent event) throws ParseException {
         ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutosManager().getProdutos());
         for(int i = 0; i < produtos.size(); i++)
         {
@@ -174,15 +205,18 @@ public class FXMLDocumentController implements Initializable {
               
               
               tabelaProduto.refresh();
+              PreencherOpcoesCaixa();
               break;
           }
+          
         }
+        LimparCampos();
+        PreencherTabela();
         
-         
     }
 
     @FXML
-    private void RemoverEClicked(ActionEvent event) {
+    private void RemoverEClicked(ActionEvent event) throws ParseException {
         ProdutosManager produtos = new ProdutosManager();
         
         for(int i = produtos.getProdutos().size()-1; i >= 0; i--)
@@ -190,6 +224,7 @@ public class FXMLDocumentController implements Initializable {
           if (produtos.getProdutos().get(i).getId().equals(lbId.getText())){
               produtos.getProdutos().remove(i);
               PreencherTabela();
+              LimparCampos();
               break;
           }
         }
@@ -216,8 +251,24 @@ public class FXMLDocumentController implements Initializable {
         lbId.setText(produto.getId());
         txtNome.setText(produto.getNome());
         txtValor.setText(produto.getValor());
-        txtValidade.setText(produto.getValidade());
+        txtValidade.setText(produto.getValidade().substring(0,10));
         txtQuantidade.setText(produto.getQuantidade());
+    }
+    private void LimparCampos()
+    {
+        txtValor.clear();
+        txtNome.clear();
+        txtQuantidade.setText("0");
+        txtValidade.clear();
+    }
+    private void PreencherOpcoesCaixa()
+    {
+      ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutosManager().getProdutos());
+      for(int i = 0; i < produtos.size(); i++)
+      {
+        chBoxProdutos.getItems().add(produtos.get(i).getNome());
+      }
+
     }
     
 }
