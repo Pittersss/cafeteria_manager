@@ -22,7 +22,8 @@ public class Cafeteria_manager_project extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument2.fxml"));
         
         Scene scene = new Scene(root);
-        
+        String css = this.getClass().getResource("style.css").toExternalForm();
+        scene.getStylesheets().add(css);
         stage.setScene(scene);
         stage.show();
     }
