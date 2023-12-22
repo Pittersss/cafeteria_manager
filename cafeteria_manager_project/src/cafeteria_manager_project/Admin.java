@@ -1,46 +1,53 @@
 package cafeteria_manager_project;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Date;
+
 
 public class Admin {
     public String[] meses = {"Janeiro","Fevereiro","Março","Abril","Maio", "Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"};
-    private float gastos;
-    private float ganhos;
+    private static List<String> produtosVendidosMes = new ArrayList<String>();
+    private float investimentoTotal;
+    private float valorVendidoDia;
+    private float gastosMensais;
+    private float ganhosMensais;
     private float lucro;
-    private int mes;
     private boolean fecharMes;
     
-    public float getGastos()
+    public float getGastosMensais()
     {
-        return gastos;
+        return gastosMensais;
     }
-    public void setGastos(float newGasto)
+    public void setGastosMensais(float newGasto)
     {
-        this.gastos = newGasto;
+        this.gastosMensais = newGasto;
     }
-    public float getGanhos()
+    public float getGanhosMensais()
     {
-        return ganhos;
+        return ganhosMensais;
     }
     public void setGanhos(float newGanho)
     {
-        this.gastos = newGanho;
+        this.gastosMensais = newGanho;
     }
-    public int getMes()
-    {
-        return mes;
-    }
-    public void setMes(int newMes)
-    {
-        this.mes = newMes;
-    }
+    
     public void setFecharMes(boolean value)
     {
         this.fecharMes = value;
         if (value){
             //Salvar Dados e armazenas em uma lista para ser vizualizada
             //Alocação do Mês
-            lucro = ganhos - gastos;
+            lucro = ganhosMensais - gastosMensais;
         }
     }
+    public List<String> getVendidos(){
+        return produtosVendidosMes;
+    }
+    public void AddProdutoVendidos(String produto){
+        produtosVendidosMes.add(produto);
+    }
+    
     
 }

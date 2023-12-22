@@ -1,31 +1,48 @@
 package cafeteria_manager_project;
 
+import java.math.BigDecimal;
+
 
 public class Produto {
     private static int base = -1;
-    private String id;
-    private String valor;
+    private int id;
+    private BigDecimal valorVenda;
+    private BigDecimal valorCompra;
     private String nome;
     private String validade;
-    private String quantidade;
+    private int quantidade;
+    private static int vendidos;
     
     public Produto()
     {
+      this.vendidos = 0;
       base += 1;
-      this.id = String.valueOf(base);  
+      this.id = base;  
     }
-    public String getId()
+    public int getId()
     {
         return id;
     }
-    
-    public String getValor()
+    public void setId(int newId)
     {
-        return valor;
+         this.id = newId;
     }
-    public void setValor(String newValue)
+    
+    public BigDecimal getValorVenda()
     {
-        this.valor = newValue;
+        return valorVenda;
+    }
+    public void setValorVenda(BigDecimal newValue)
+    {
+        this.valorVenda = newValue;
+    }
+    public BigDecimal getValorCompra()
+    {
+        return valorCompra;
+    }
+    public void setValorCompra(BigDecimal newValue)
+    {
+        this.valorCompra = newValue;
     }
     public String getNome()
     {
@@ -43,13 +60,22 @@ public class Produto {
     {
         this.validade = newDate;
     }
-    public String getQuantidade()
+    public int getQuantidade()
     {
         return quantidade;
     }
-    public void setQuantidade(String newQnt)
+    public void setQuantidade(int newQnt)
     {
         this.quantidade = newQnt;
+    }
+    public void DiminuirQuantidade(int qnt){
+      this.quantidade = quantidade - qnt;
+    }
+    public void ProdutoVendido(){
+        this.vendidos += 1;
+    }
+    public int GetVendidos(){
+        return vendidos;
     }
     
 }
