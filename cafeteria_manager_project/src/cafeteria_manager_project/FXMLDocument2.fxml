@@ -106,7 +106,7 @@
                               <Font name="Calibri Bold" size="24.0" />
                            </font>
                         </Label>
-                        <Label layoutX="611.0" layoutY="337.0" prefHeight="61.0" prefWidth="110.0" text="VALIDADE:" textFill="WHITE">
+                        <Label layoutX="605.0" layoutY="338.0" prefHeight="61.0" prefWidth="110.0" text="VALIDADE:" textFill="WHITE">
                            <font>
                               <Font name="Calibri Bold" size="24.0" />
                            </font>
@@ -120,10 +120,6 @@
                               <Font size="18.0" />
                            </font></TextField>
                         <TextField id="txtQuantidade" fx:id="txtQuantidade" layoutX="828.0" layoutY="258.0" prefHeight="39.0" prefWidth="139.0" text="0">
-                           <font>
-                              <Font size="18.0" />
-                           </font></TextField>
-                        <TextField id="txtValidade" fx:id="txtValidade" layoutX="728.0" layoutY="342.0" prefHeight="51.0" prefWidth="126.0">
                            <font>
                               <Font size="18.0" />
                            </font></TextField>
@@ -163,6 +159,7 @@
                               <Font size="18.0" />
                            </font>
                         </TextField>
+                        <DatePicker fx:id="dataValidade" layoutX="724.0" layoutY="343.0" prefHeight="50.0" prefWidth="147.0" />
                      </children>
                   </AnchorPane>
               </content>
@@ -212,12 +209,12 @@
                               <Font name="Calibri Bold" size="24.0" />
                            </font>
                         </Label>
-                        <Button layoutX="232.0" layoutY="481.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="155.0" text="FECHAR MÊS" textFill="RED">
+                        <Button layoutX="232.0" layoutY="481.0" mnemonicParsing="false" onAction="#FecharMesAClicked" prefHeight="71.0" prefWidth="155.0" text="FECHAR MÊS" textFill="RED">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Button>
-                        <Button layoutX="14.0" layoutY="481.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="155.0" text="FECHAR CAIXA">
+                        <Button layoutX="14.0" layoutY="481.0" mnemonicParsing="false" onAction="#FecharCaixaAClicked" prefHeight="71.0" prefWidth="155.0" text="FECHAR CAIXA">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>

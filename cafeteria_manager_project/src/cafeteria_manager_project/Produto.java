@@ -1,9 +1,10 @@
 package cafeteria_manager_project;
 
 import java.math.BigDecimal;
+import cafeteria_manager_project.ProdutosManager;
 
 
-public class Produto {
+public class Produto{
     private static int base = -1;
     private int id;
     private BigDecimal valorVenda;
@@ -68,8 +69,13 @@ public class Produto {
     {
         this.quantidade = newQnt;
     }
-    public void DiminuirQuantidade(int qnt){
+    public void DiminuirQuantidade(int qnt)
+    {
       this.quantidade = quantidade - qnt;
+    }
+     public void AumentarQuantidade(int qnt)
+    {
+      this.quantidade = quantidade + qnt;
     }
     public void ProdutoVendido(){
         this.vendidos += 1;
