@@ -79,8 +79,6 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TableColumn<Produto, String> colValorVenda;
     @FXML
-    private TableColumn<Produto, String> colValorCompra;
-    @FXML
     private TableColumn<Produto, String> colQuantidade;
     @FXML
     private TableColumn<Produto, String> colValidade;
@@ -88,8 +86,6 @@ public class FXMLDocumentController implements Initializable {
     private TextField txtNome;
     @FXML
     private TextField txtValorVenda;
-    @FXML
-    private TextField txtValorCompra;
     @FXML
     private TextField txtQuantidade;
     @FXML
@@ -126,8 +122,7 @@ public class FXMLDocumentController implements Initializable {
         // TODO
         colId.setCellValueFactory(new PropertyValueFactory<Produto, String>("id"));
         colNome.setCellValueFactory(new PropertyValueFactory<Produto, String>("nome"));
-        colValorVenda.setCellValueFactory(new PropertyValueFactory<Produto, String>("valorVenda"));
-        colValorCompra.setCellValueFactory(new PropertyValueFactory<Produto, String>("valorCompra"));
+        colValorVenda.setCellValueFactory(new PropertyValueFactory<Produto, String>("valor"));
         colValidade.setCellValueFactory(new PropertyValueFactory<Produto, String>("validade"));
         colQuantidade.setCellValueFactory(new PropertyValueFactory<Produto, String>("quantidade"));
         try {
@@ -189,7 +184,7 @@ public class FXMLDocumentController implements Initializable {
       {
         if (produtos.get(i).getQuantidade() > 0)
         {
-            nomesProdutos.add(produtos.get(i).getId() + " - " + produtos.get(i).getNome() + " R$ " + produtos.get(i).getValorVenda());
+            nomesProdutos.add(produtos.get(i).getId() + " - " + produtos.get(i).getNome() + " - R$ " + produtos.get(i).getValor());
         }
         else
         {
@@ -197,13 +192,10 @@ public class FXMLDocumentController implements Initializable {
         }
       }
       listaProdutos.setItems(nomesProdutos);
-      System.out.println(nomesProdutos.isEmpty());
     }
     private void PreencherCompras(){
         ObservableList<String> nomesProdutos = FXCollections.observableArrayList(new ProdutosManager().getProdutosCompras());
-        listaCompras.setItems(nomesProdutos);
-        System.out.println("Preencheu as compras do usuário");  
-    
+        listaCompras.setItems(nomesProdutos); 
     }
     private void PreencherProdutosVendidos()
     {
@@ -234,9 +226,7 @@ public class FXMLDocumentController implements Initializable {
         {
             Produto p = new Produto();
             BigDecimal valorVenda = new BigDecimal(txtValorVenda.getText());
-            p.setValorVenda(valorVenda);
-            BigDecimal valorCompra = new BigDecimal(txtValorCompra.getText());
-            p.setValorCompra(valorCompra);
+            p.setValor(valorVenda);
             p.setNome(txtNome.getText().toUpperCase());
             p.setValidade(dataValidade.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             p.setQuantidade(Integer.parseInt(txtQuantidade.getText()));
@@ -259,9 +249,7 @@ public class FXMLDocumentController implements Initializable {
           {
               produtos.get(i).setNome(txtNome.getText());
               BigDecimal valorVenda = new BigDecimal(txtValorVenda.getText());
-              produtos.get(i).setValorVenda(valorVenda);
-              BigDecimal valorCompra = new BigDecimal(txtValorCompra.getText());
-              produtos.get(i).setValorCompra(valorCompra);
+              produtos.get(i).setValor(valorVenda);
               produtos.get(i).setQuantidade(Integer.parseInt(txtQuantidade.getText()));
               produtos.get(i).setValidade(dataValidade.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
               
@@ -336,6 +324,9 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void RegistrarCClicked(ActionEvent event) {
+       try
+       {
+       Float.parseFloat(txtRecebido.getText());
        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
        Date today = new Date();
        String dataHoje = sdf.format(today);
@@ -352,31 +343,36 @@ public class FXMLDocumentController implements Initializable {
                for(int j = 0; j < comprados.size(); j++)
                {
                   if (comprados.get(j).substring(0, fimIndex).equals(idProduto))
-                  {
-                      new ProdutosManager().AdicionarProdutoVendido(comprados.get(i) + " " + dataHoje);
-                      counter += 1;
+                  { 
+                     new ProdutosManager().AdicionarProdutoVendido(comprados.get(i) + " - " + dataHoje);
                   }
                }
-               int indexProduto = getProduto(Integer.parseInt(idProduto));
-               produtos.get(indexProduto).setQuantidade(produtos.get(indexProduto).getQuantidade() - counter);
                contados.add(idProduto);
                tabelaProduto.refresh();               
            }   
-           else{
+           else
+           {
                continue;
            }
-           listaCompras.getItems().clear();
-           txtValorNoCaixa.setText(String.valueOf((Float.parseFloat((txtValorNoCaixa.getText())) + Float.parseFloat(txtRecebido.getText())) - Float.parseFloat(txtTroco.getText().substring(2))));
-           txtLucrosMensais.setText(String.valueOf(Float.parseFloat(txtLucrosMensais.getText()) + Float.parseFloat(txtValorNoCaixa.getText())));
-           txtValorTotal.setText("R$ 0");
-           txtRecebido.setText("");
-           txtTroco.setText("R$ 0");
-           new ProdutosManager().limparProdutos();
-           PreencherCompras();
-           PreencherOpcoesCaixa();
+           
        }
        PreencherProdutosVendidos();
-          
+       listaCompras.getItems().clear();
+       txtValorNoCaixa.setText(String.valueOf((Float.parseFloat((txtValorNoCaixa.getText())) + Float.parseFloat(txtRecebido.getText())) - Float.parseFloat(txtTroco.getText().substring(2))));
+       txtLucrosMensais.setText(String.valueOf(Float.parseFloat(txtLucrosMensais.getText()) + Float.parseFloat(txtValorNoCaixa.getText())));
+       txtValorTotal.setText("R$ 0");
+       txtRecebido.setText("");
+       txtTroco.setText("R$ 0");
+       new ProdutosManager().limparProdutos();
+       PreencherCompras();
+       PreencherOpcoesCaixa();
+       }
+       catch (Exception ex)
+       {
+        Alert a = new Alert(AlertType.ERROR);
+        a.setContentText("DIGITE OS DADOS CORRETAMENTE");
+        a.show();
+       }    
     }
     @FXML
     private void GetValorRecebidoC(ActionEvent event) 
@@ -400,8 +396,7 @@ public class FXMLDocumentController implements Initializable {
                 {
                     lbId.setText(String.valueOf(produtos.get(i).getId()));
                     txtNome.setText(produtos.get(i).getNome());
-                    txtValorVenda.setText(produtos.get(i).getValorVenda().toString());
-                    txtValorCompra.setText(produtos.get(i).getValorVenda().toString());
+                    txtValorVenda.setText(produtos.get(i).getValor().toString());
                     txtQuantidade.setText(String.valueOf(produtos.get(i).getQuantidade()));
                     //txtValidade.setText(produtos.get(i).getValidade());
                     dataValidade.setValue(LocalDate.parse(produtos.get(i).getValidade()));
@@ -469,8 +464,7 @@ public class FXMLDocumentController implements Initializable {
            listaCompras.refresh();
            
            ObservableList<String> produtosComprados = FXCollections.observableArrayList(new ProdutosManager().getProdutosCompras());
-           CalcularSubTotal(produtosComprados);
-           System.out.println("Removeu");   
+           CalcularSubTotal(produtosComprados);  
        }
        else
        {
@@ -488,15 +482,13 @@ public class FXMLDocumentController implements Initializable {
         Produto produto = (Produto)tabelaProduto.getItems().get(i);
         lbId.setText(String.valueOf(produto.getId()));
         txtNome.setText(produto.getNome());
-        txtValorVenda.setText(produto.getValorVenda().toString());
-        txtValorCompra.setText(produto.getValorCompra().toString());
+        txtValorVenda.setText(produto.getValor().toString());
         dataValidade.setValue(LocalDate.parse(produto.getValidade().substring(0,10), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         txtQuantidade.setText(String.valueOf(produto.getQuantidade()));
     }
     private void LimparCampos()
     {
         txtValorVenda.clear();
-        txtValorCompra.clear();
         txtNome.clear();
         txtQuantidade.setText("0");    
     }
@@ -518,9 +510,9 @@ public class FXMLDocumentController implements Initializable {
                     return inicio;
                 }    
             }
-            else{
-                return inicio;
-                
+            else
+            {
+                return inicio;  
             }
         }
         return 0; 
@@ -557,7 +549,8 @@ public class FXMLDocumentController implements Initializable {
     }
     
     @FXML
-    private void listaProdutosClicked(MouseEvent event) {
+    private void listaProdutosClicked(MouseEvent event) 
+    {
         int i  = listaProdutos.getSelectionModel().getSelectedIndex();
         String produto = listaProdutos.getItems().get(i);
         lbProdutoComprado.setText(produto);
@@ -575,7 +568,6 @@ public class FXMLDocumentController implements Initializable {
       try
       {
        Float.parseFloat(txtValorVenda.getText());
-       Float.parseFloat(txtValorCompra.getText());
        Float.parseFloat(txtQuantidade.getText());
        return true;
       }

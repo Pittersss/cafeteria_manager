@@ -65,7 +65,7 @@
                               <Font name="System Bold Italic" size="18.0" />
                            </font>
                         </Button>
-                        <Label fx:id="lbProdutoComprado" layoutX="183.0" layoutY="534.0" prefHeight="35.0" prefWidth="61.0" textFill="WHITE" />
+                        <Label fx:id="lbProdutoComprado" layoutX="183.0" layoutY="534.0" prefHeight="35.0" prefWidth="61.0" textFill="WHITE" visible="false" />
                         <Label fx:id="lbProdutosCaixa" layoutX="498.0" layoutY="205.0" prefHeight="35.0" prefWidth="86.0" textFill="WHITE" />
                      </children>
                   </AnchorPane>
@@ -84,11 +84,10 @@
                         <TableView fx:id="tabelaProduto" layoutX="14.0" layoutY="62.0" onMouseClicked="#tbProdutosClicked" prefHeight="573.0" prefWidth="570.0">
                           <columns>
                               <TableColumn fx:id="colId" prefWidth="49.0" text="ID" />
-                            <TableColumn fx:id="colNome" prefWidth="122.0" text="NOME" />
-                            <TableColumn fx:id="colValorCompra" prefWidth="100.0" text="VALOR COMPRA" />
-                              <TableColumn fx:id="colValorVenda" minWidth="0.0" prefWidth="92.0" text="VALOR VENDA" />
-                              <TableColumn fx:id="colQuantidade" minWidth="0.0" prefWidth="84.0" text="QUANTIDADE" />
-                              <TableColumn fx:id="colValidade" minWidth="0.0" prefWidth="122.0" text="VALIDADE" />
+                            <TableColumn fx:id="colNome" prefWidth="184.0" text="NOME" />
+                              <TableColumn fx:id="colValorVenda" minWidth="0.0" prefWidth="98.0" text="VALOR VENDA" />
+                              <TableColumn fx:id="colQuantidade" minWidth="0.0" prefWidth="102.0" text="QUANTIDADE" />
+                              <TableColumn fx:id="colValidade" minWidth="0.0" prefWidth="136.0" text="VALIDADE" />
                           </columns>
                         </TableView>
                         <Label layoutX="605.0" layoutY="86.0" prefHeight="35.0" prefWidth="76.0" text="NOME:" textFill="WHITE">
@@ -101,12 +100,12 @@
                               <Font name="Calibri Bold" size="24.0" />
                            </font>
                         </Label>
-                        <Label layoutX="605.0" layoutY="260.0" prefHeight="35.0" prefWidth="144.0" text="QUANTIDADE:" textFill="WHITE">
+                        <Label layoutX="604.0" layoutY="196.0" prefHeight="35.0" prefWidth="144.0" text="QUANTIDADE:" textFill="WHITE">
                            <font>
                               <Font name="Calibri Bold" size="24.0" />
                            </font>
                         </Label>
-                        <Label layoutX="605.0" layoutY="338.0" prefHeight="61.0" prefWidth="110.0" text="VALIDADE:" textFill="WHITE">
+                        <Label layoutX="604.0" layoutY="274.0" prefHeight="61.0" prefWidth="110.0" text="VALIDADE:" textFill="WHITE">
                            <font>
                               <Font name="Calibri Bold" size="24.0" />
                            </font>
@@ -119,7 +118,7 @@
                            <font>
                               <Font size="18.0" />
                            </font></TextField>
-                        <TextField id="txtQuantidade" fx:id="txtQuantidade" layoutX="828.0" layoutY="258.0" prefHeight="39.0" prefWidth="139.0" text="0">
+                        <TextField id="txtQuantidade" fx:id="txtQuantidade" layoutX="827.0" layoutY="194.0" prefHeight="39.0" prefWidth="139.0" text="0">
                            <font>
                               <Font size="18.0" />
                            </font></TextField>
@@ -138,28 +137,18 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Button>
-                        <Button id="btnEdit" fx:id="btnMaisUm" layoutX="769.0" layoutY="250.0" mnemonicParsing="false" onAction="#MaisUmEClicked" prefHeight="56.0" prefWidth="35.0" text="+">
+                        <Button id="btnEdit" fx:id="btnMaisUm" layoutX="768.0" layoutY="186.0" mnemonicParsing="false" onAction="#MaisUmEClicked" prefHeight="56.0" prefWidth="35.0" text="+">
                            <font>
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Button>
-                        <Button id="btnEdit" fx:id="btnMenosUm" layoutX="979.0" layoutY="250.0" mnemonicParsing="false" onAction="#MenosUmEClicked" prefHeight="56.0" prefWidth="48.0" text="-">
+                        <Button id="btnEdit" fx:id="btnMenosUm" layoutX="978.0" layoutY="186.0" mnemonicParsing="false" onAction="#MenosUmEClicked" prefHeight="56.0" prefWidth="48.0" text="-">
                            <font>
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Button>
                         <Label fx:id="lbId" layoutX="736.0" layoutY="25.0" prefHeight="31.0" prefWidth="47.0" textFill="WHITE" visible="false" />
-                        <Label layoutX="602.0" layoutY="199.0" prefHeight="35.0" prefWidth="207.0" text="VALOR DE COMPRA:" textFill="WHITE">
-                           <font>
-                              <Font name="Calibri Bold" size="24.0" />
-                           </font>
-                        </Label>
-                        <TextField id="txtValor" fx:id="txtValorCompra" layoutX="809.0" layoutY="197.0" prefHeight="25.0" prefWidth="207.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </TextField>
-                        <DatePicker fx:id="dataValidade" layoutX="724.0" layoutY="343.0" prefHeight="50.0" prefWidth="147.0" />
+                        <DatePicker fx:id="dataValidade" layoutX="723.0" layoutY="279.0" prefHeight="50.0" prefWidth="147.0" />
                      </children>
                   </AnchorPane>
               </content>

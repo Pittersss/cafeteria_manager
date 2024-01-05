@@ -7,8 +7,7 @@ import cafeteria_manager_project.ProdutosManager;
 public class Produto{
     private static int base = -1;
     private int id;
-    private BigDecimal valorVenda;
-    private BigDecimal valorCompra;
+    private BigDecimal valor;
     private String nome;
     private String validade;
     private int quantidade;
@@ -29,21 +28,13 @@ public class Produto{
          this.id = newId;
     }
     
-    public BigDecimal getValorVenda()
+    public BigDecimal getValor()
     {
-        return valorVenda;
+        return valor;
     }
-    public void setValorVenda(BigDecimal newValue)
+    public void setValor (BigDecimal newValue)
     {
-        this.valorVenda = newValue;
-    }
-    public BigDecimal getValorCompra()
-    {
-        return valorCompra;
-    }
-    public void setValorCompra(BigDecimal newValue)
-    {
-        this.valorCompra = newValue;
+        this.valor = newValue;
     }
     public String getNome()
     {
