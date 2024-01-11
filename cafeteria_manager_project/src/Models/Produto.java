@@ -1,11 +1,13 @@
-package cafeteria_manager_project;
+package Models;
 
 import java.math.BigDecimal;
-import cafeteria_manager_project.ProdutosManager;
+import java.sql.SQLException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 
 public class Produto{
-    private static int base = -1;
+    //public static int base = -1;
     private int id;
     private BigDecimal valor;
     private String nome;
@@ -16,8 +18,8 @@ public class Produto{
     public Produto()
     {
       this.vendidos = 0;
-      base += 1;
-      this.id = base;  
+      //base += 1;
+      //this.id = base;  
     }
     public int getId()
     {
@@ -26,6 +28,19 @@ public class Produto{
     public void setId(int newId)
     {
          this.id = newId;
+    }
+    public void setId() throws SQLException
+    {
+        ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutoDAO().getProdutos());
+        if (!produtos.isEmpty())
+        {
+           this.id = produtos.size(); 
+        }
+        else
+        {
+            this.id = 0;
+        }
+        
     }
     
     public BigDecimal getValor()

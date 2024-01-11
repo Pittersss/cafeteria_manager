@@ -5,8 +5,11 @@
  */
 package cafeteria_manager_project;
 
+import Models.ProdutoDAO;
+import Models.Produto;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -119,23 +122,33 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb)  {
-        // TODO
-        colId.setCellValueFactory(new PropertyValueFactory<Produto, String>("id"));
-        colNome.setCellValueFactory(new PropertyValueFactory<Produto, String>("nome"));
-        colValorVenda.setCellValueFactory(new PropertyValueFactory<Produto, String>("valor"));
-        colValidade.setCellValueFactory(new PropertyValueFactory<Produto, String>("validade"));
-        colQuantidade.setCellValueFactory(new PropertyValueFactory<Produto, String>("quantidade"));
         try {
-            PreencherTabela();
-        } catch (ParseException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            // TODO
+            colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+            colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+            colValorVenda.setCellValueFactory(new PropertyValueFactory<>("valor"));
+            colValidade.setCellValueFactory(new PropertyValueFactory<>("validade"));
+            colQuantidade.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
+            try { 
+                ProdutoDAO dao = new ProdutoDAO();
+                dao.ListarProdutos();
+                ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutoDAO().getProdutos());
+                System.out.println(produtos.size());
+                PreencherTabela();
+            } catch (ParseException | SQLException ex) {
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                 
+        }
+        catch(Exception ex){
+            
         }
 
     }
-    private void PreencherTabela() throws ParseException
+    private void PreencherTabela() throws ParseException, SQLException
     {
         
-        ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutosManager().getProdutos());
+        ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutoDAO().getProdutos());
         String status = "";
         for(int i = 0;i < produtos.size();i++)
         {
@@ -176,9 +189,9 @@ public class FXMLDocumentController implements Initializable {
     
     //Métodos Auxiliares
     
-    private void PreencherOpcoesCaixa()
+    private void PreencherOpcoesCaixa() throws SQLException
     {
-      ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutosManager().getProdutos());
+      ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutoDAO().getProdutos());
       ObservableList<String> nomesProdutos = FXCollections.observableArrayList();
       for(int i = 0; i < produtos.size(); i++)
       {
@@ -193,14 +206,14 @@ public class FXMLDocumentController implements Initializable {
       }
       listaProdutos.setItems(nomesProdutos);
     }
-    private void PreencherCompras(){
-        ObservableList<String> nomesProdutos = FXCollections.observableArrayList(new ProdutosManager().getProdutosCompras());
+    private void PreencherCompras() throws SQLException{
+        ObservableList<String> nomesProdutos = FXCollections.observableArrayList(new ProdutoDAO().getProdutosCompras());
         listaCompras.setItems(nomesProdutos); 
     }
-    private void PreencherProdutosVendidos()
+    private void PreencherProdutosVendidos() throws SQLException
     {
         try{
-            ObservableList<String> produtosVendidos = FXCollections.observableArrayList(new ProdutosManager().getProdutosVendidos());
+            ObservableList<String> produtosVendidos = FXCollections.observableArrayList(new ProdutoDAO().getProdutosVendidos());
             listaProdutosVendidos.setItems(produtosVendidos);
         }
         catch(NullPointerException e)
@@ -221,16 +234,19 @@ public class FXMLDocumentController implements Initializable {
         
     }
     @FXML
-    private void AdicionarEClicked(ActionEvent event) throws ParseException {
+    private void AdicionarEClicked(ActionEvent event) throws ParseException, SQLException {
         if (SomenteNumeros() && ValidadorData())
         {
             Produto p = new Produto();
+            p.setId();
             BigDecimal valorVenda = new BigDecimal(txtValorVenda.getText());
             p.setValor(valorVenda);
             p.setNome(txtNome.getText().toUpperCase());
             p.setValidade(dataValidade.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             p.setQuantidade(Integer.parseInt(txtQuantidade.getText()));
-            new ProdutosManager().AdicionarProduto(p);
+            System.out.println(p.getId());
+            new ProdutoDAO().AdicionarProduto(p);
+            System.out.println(p.getId());
             PreencherOpcoesCaixa();
             PreencherTabela();
             LimparCampos();
@@ -239,8 +255,8 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void EditarEClicked(ActionEvent event) throws ParseException {
-        ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutosManager().getProdutos());
+    private void EditarEClicked(ActionEvent event) throws ParseException, SQLException {
+        ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutoDAO().getProdutos());
         if (!lbId.getText().isEmpty())
         {
         for(int i = 0; i < produtos.size(); i++)
@@ -266,14 +282,17 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void RemoverEClicked(ActionEvent event) throws ParseException {
-        ProdutosManager produtos = new ProdutosManager();
-        
+    private void RemoverEClicked(ActionEvent event) throws ParseException, SQLException {
+        ProdutoDAO produtos = new ProdutoDAO();
+        System.out.println(produtos.getProdutos().size());
         for(int i = produtos.getProdutos().size()-1; i >= 0; i--)
         {
-          if (produtos.getProdutos().get(i).getId() ==  Integer.parseInt(lbId.getText())){
+          if (produtos.getProdutos().get(i).getId() ==  Integer.parseInt(lbId.getText()))
+          {
+              produtos.ApagarProduto(i);
               produtos.getProdutos().remove(i);
-              produtos.AjustarIds();
+              ProdutoDAO dao = new ProdutoDAO();
+              dao.AjustarIds();
               PreencherTabela();
               PreencherOpcoesCaixa();
               LimparCampos();
@@ -297,8 +316,8 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void AdicionarCClicked(Event event) {
-        ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutosManager().getProdutos());
+    private void AdicionarCClicked(Event event) throws SQLException {
+        ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutoDAO().getProdutos());
         String produtoEscolhido = lbProdutoComprado.getText();
         if(!produtoEscolhido.isEmpty())
         { 
@@ -307,9 +326,9 @@ public class FXMLDocumentController implements Initializable {
         tabelaProduto.refresh();
         PreencherOpcoesCaixa();
         
-        new ProdutosManager().AdicionarCompras(produtoEscolhido);
+        new ProdutoDAO().AdicionarCompras(produtoEscolhido);
         PreencherCompras();
-        ObservableList<String> produtosComprados = FXCollections.observableArrayList(new ProdutosManager().getProdutosCompras());
+        ObservableList<String> produtosComprados = FXCollections.observableArrayList(new ProdutoDAO().getProdutosCompras());
         CalcularSubTotal(produtosComprados);
         }
         else
@@ -330,8 +349,8 @@ public class FXMLDocumentController implements Initializable {
        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
        Date today = new Date();
        String dataHoje = sdf.format(today);
-       ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutosManager().getProdutos());
-       ObservableList<String> comprados = FXCollections.observableArrayList(new ProdutosManager().getProdutosCompras());
+       ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutoDAO().getProdutos());
+       ObservableList<String> comprados = FXCollections.observableArrayList(new ProdutoDAO().getProdutosCompras());
        List<String> contados = new ArrayList<String>();
        for(int i = 0; i < comprados.size();i++)
        {
@@ -344,7 +363,7 @@ public class FXMLDocumentController implements Initializable {
                {
                   if (comprados.get(j).substring(0, fimIndex).equals(idProduto))
                   { 
-                     new ProdutosManager().AdicionarProdutoVendido(comprados.get(i) + " - " + dataHoje);
+                     new ProdutoDAO().AdicionarProdutoVendido(comprados.get(i) + " - " + dataHoje);
                   }
                }
                contados.add(idProduto);
@@ -363,7 +382,7 @@ public class FXMLDocumentController implements Initializable {
        txtValorTotal.setText("R$ 0");
        txtRecebido.setText("");
        txtTroco.setText("R$ 0");
-       new ProdutosManager().limparProdutos();
+       new ProdutoDAO().limparProdutos();
        PreencherCompras();
        PreencherOpcoesCaixa();
        }
@@ -386,8 +405,8 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void PesquisarEClicked(ActionEvent event) throws ParseException {
-        ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutosManager().getProdutos());
+    private void PesquisarEClicked(ActionEvent event) throws ParseException, SQLException {
+        ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutoDAO().getProdutos());
         if (txtPesquisar.getText() != "")
         {
             for(int i = 0; i < produtos.size(); i++)
@@ -449,13 +468,13 @@ public class FXMLDocumentController implements Initializable {
         });
     }
     @FXML
-    private void RemoverCCompras(ActionEvent event)
+    private void RemoverCCompras(ActionEvent event) throws SQLException
     {
        if (!lbProdutosCaixa.getText().isEmpty())
        {
            String indexProduto  = listaCompras.getSelectionModel().getSelectedItem().substring(0,1);
-           ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutosManager().getProdutos());
-           new ProdutosManager().removerProdutosCompras(Integer.parseInt(lbProdutosCaixa.getText()));
+           ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutoDAO().getProdutos());
+           new ProdutoDAO().removerProdutosCompras(Integer.parseInt(lbProdutosCaixa.getText()));
            produtos.get(Integer.parseInt(indexProduto)).AumentarQuantidade(1);
            PreencherCompras();
            PreencherOpcoesCaixa();
@@ -463,7 +482,7 @@ public class FXMLDocumentController implements Initializable {
            tabelaProduto.refresh();
            listaCompras.refresh();
            
-           ObservableList<String> produtosComprados = FXCollections.observableArrayList(new ProdutosManager().getProdutosCompras());
+           ObservableList<String> produtosComprados = FXCollections.observableArrayList(new ProdutoDAO().getProdutosCompras());
            CalcularSubTotal(produtosComprados);  
        }
        else
@@ -492,9 +511,9 @@ public class FXMLDocumentController implements Initializable {
         txtNome.clear();
         txtQuantidade.setText("0");    
     }
-    public int getProduto(int id)
+    public int getProduto(int id) throws SQLException
     {
-        ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutosManager().getProdutos());
+        ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutoDAO().getProdutos());
         int fim = produtos.size()-1;
         for (int inicio = 0; inicio != fim;)
         {

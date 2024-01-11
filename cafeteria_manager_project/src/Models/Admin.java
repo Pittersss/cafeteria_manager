@@ -1,4 +1,4 @@
-package cafeteria_manager_project;
+package Models;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

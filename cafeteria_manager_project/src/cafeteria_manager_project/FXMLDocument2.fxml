@@ -147,7 +147,7 @@
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Button>
-                        <Label fx:id="lbId" layoutX="736.0" layoutY="25.0" prefHeight="31.0" prefWidth="47.0" textFill="WHITE" visible="false" />
+                        <Label fx:id="lbId" layoutX="736.0" layoutY="25.0" prefHeight="31.0" prefWidth="47.0" textFill="WHITE" />
                         <DatePicker fx:id="dataValidade" layoutX="723.0" layoutY="279.0" prefHeight="50.0" prefWidth="147.0" />
                      </children>
                   </AnchorPane>

@@ -1,5 +1,6 @@
 
-package cafeteria_manager_project;
+package Connection;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,10 +14,10 @@ import java.util.logging.Logger;
  */
 public class ConnectionFactory 
 {
-    public static final String DRIVER = "com.mysql.jdbc.Driver";
-    public static final String URL = "jdbc:mysql//localhost:3306/bdlanchonete";
+    public static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+    public static final String URL = "jdbc:mysql://localhost:3306/bdlanchonete";
     public static final String USER = "root";
-    public static final String PASS = "Suamae6@8";
+    public static final String PASS = "";
     
     public static Connection getConnection() throws SQLException
     {
