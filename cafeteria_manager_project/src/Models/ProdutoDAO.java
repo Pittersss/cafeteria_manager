@@ -45,8 +45,7 @@ public class ProdutoDAO {
         {
             ConnectionFactory.closeConnection(con, stmt);
         }
-        
-        
+   
     }
     
     public boolean EditarProduto(Produto produto)

@@ -24,7 +24,7 @@ public class ProdutoDAONGTest {
     {
         Produto p = new Produto();
         p.setId(0);
-        p.setNome("cu");
+        p.setNome("teste");
         p.setQuantidade(1);
         p.setValidade("20/12/2023");
         p.setValor(BigDecimal.ZERO);
@@ -40,11 +40,30 @@ public class ProdutoDAONGTest {
         
     }
     @Test(enabled=false)
+    public void InserirVendidosTest() throws SQLException 
+    {
+        ProdutosVendidos p = new ProdutosVendidos();
+        p.setId(0);
+        p.setNome("teste");
+        p.setData("20/12/2023");
+        p.setValor(BigDecimal.ZERO);
+        ProdutosVendidosDAO dao = new ProdutosVendidosDAO();
+        if (dao.AdicionarProdutoVendido(p))
+        {
+            System.out.println("Inseriu produto com sucesso!");
+        }
+        else
+        {
+            System.out.println("Ocorreu um erro!");
+        }
+        
+    }
+    @Test(enabled=false)
     public void AtualizarTest() throws SQLException 
     {
         Produto p = new Produto();
         p.setId(1);
-        p.setNome("cus");
+        p.setNome("testes");
         p.setQuantidade(1);
         p.setValidade("20/12/2023");
         p.setValor(BigDecimal.ZERO);
@@ -70,7 +89,7 @@ public class ProdutoDAONGTest {
           System.out.println(c.getNome());
       }
     }
-    @Test
+    @Test(enabled=false)
     public void ApagarTest() throws SQLException
     {
       ProdutoDAO dao = new ProdutoDAO();

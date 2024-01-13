@@ -1,51 +1,50 @@
 package Models;
 
-import java.text.SimpleDateFormat;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
 
 
 public class Admin {
-    public String[] meses = {"Janeiro","Fevereiro","Março","Abril","Maio", "Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"};
     private static List<String> produtosVendidosMes = new ArrayList<String>();
-    private float investimentoTotal;
-    private float valorVendidoDia;
-    private float gastosMensais;
-    private float ganhosMensais;
-    private float lucro;
-    private boolean fecharMes;
+    private BigDecimal investimentoTotal;
+    private BigDecimal valorCaixa;
+    private BigDecimal gastosMensais;
+    private BigDecimal lucrosMensais;
     
-    public float getGastosMensais()
+    public BigDecimal getGastosMensais()
     {
         return gastosMensais;
     }
-    public void setGastosMensais(float newGasto)
+    public void setGastosMensais(BigDecimal newGasto)
     {
         this.gastosMensais = newGasto;
     }
-    public float getGanhosMensais()
+    public BigDecimal getValorCaixa()
     {
-        return ganhosMensais;
-    }
-    public void setGanhos(float newGanho)
-    {
-        this.gastosMensais = newGanho;
+        return valorCaixa;
     }
     
-    public void setFecharMes(boolean value)
+    public void setValorCaixa(BigDecimal newValor)
     {
-        this.fecharMes = value;
-        if (value){
-            //Salvar Dados e armazenas em uma lista para ser vizualizada
-            //Alocação do Mês
-            lucro = ganhosMensais - gastosMensais;
-        }
+        this.valorCaixa = newValor;
     }
-    public List<String> getVendidos(){
+
+    public void setLucro(BigDecimal newLucro)
+    {
+        this.lucrosMensais = newLucro;
+    }
+    public BigDecimal getLucro()
+    {
+       return lucrosMensais; 
+    }
+      
+    public List<String> getVendidos()
+    {
         return produtosVendidosMes;
     }
-    public void AddProdutoVendidos(String produto){
+    public void AddProdutoVendidos(String produto)
+    {
         produtosVendidosMes.add(produto);
     }
     
