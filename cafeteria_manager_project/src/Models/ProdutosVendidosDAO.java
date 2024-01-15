@@ -7,6 +7,7 @@ package Models;
 import Connection.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,10 @@ public class ProdutosVendidosDAO
  public ProdutosVendidosDAO() throws SQLException
  {
     con = ConnectionFactory.getConnection();
+ }
+ public List<ProdutosVendidos> getProdutosVendidos()
+ {
+     return produtosVendidos;
  }
  public boolean AdicionarProdutoVendido(ProdutosVendidos produto)
     {
@@ -47,6 +52,36 @@ public class ProdutosVendidosDAO
             ConnectionFactory.closeConnection(con, stmt);
         }
    
+    }
+    public List<ProdutosVendidos> CarregarProdutosVendidos()
+    {
+        String sql = "SELECT * FROM produtosvendidos";
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        produtosVendidos.clear();
+        try {
+            stmt = con.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            
+            while(rs.next())
+            {
+                ProdutosVendidos produtoVendido = new ProdutosVendidos();
+                produtoVendido.setId(rs.getInt("id"));
+                produtoVendido.setNome(rs.getString("nome"));
+                produtoVendido.setValor(rs.getBigDecimal("valor"));
+                produtoVendido.setData(rs.getString("data"));
+                produtosVendidos.add(produtoVendido);           
+            }
+        
+            
+        } catch (SQLException ex) {
+            System.err.println("Ocorreu um erro ao ler os produtos no banco de dados - Select - " + ex);
+        }
+        finally
+        {
+            ConnectionFactory.closeConnection(con, stmt, rs);  
+        }
+        return produtosVendidos;
     }
  
 }

@@ -187,7 +187,7 @@
                               <Font size="18.0" />
                            </font>
                         </TextField>
-                        <Label layoutX="617.0" layoutY="147.0" prefHeight="35.0" prefWidth="291.0" text="PRODUTOS VENDIDOS - MÊS" textFill="WHITE">
+                        <Label layoutX="633.0" layoutY="147.0" prefHeight="35.0" prefWidth="227.0" text="PRODUTOS VENDIDOS" textFill="WHITE">
                            <font>
                               <Font name="Calibri Bold" size="24.0" />
                            </font>

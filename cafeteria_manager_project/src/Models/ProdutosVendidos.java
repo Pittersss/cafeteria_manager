@@ -46,7 +46,7 @@ public class ProdutosVendidos
     {
         this.data = newDate;
     }
-    public static String[] SepararValores(String sequencia)
+    public  String[] SepararValores(String sequencia)
     {
     //Tirar Cifrao e Espaços "ID - NOME - R$ 00.00 - DATA"
     String novaSequencia = "";

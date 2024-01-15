@@ -72,7 +72,7 @@ public class ProdutoDAO {
             ConnectionFactory.closeConnection(con, stmt);
         }
     }
-    public List<Produto> ListarProdutos()
+    public List<Produto> CarregarProdutos()
     {
         String sql = "SELECT * FROM produto";
         ResultSet rs = null;

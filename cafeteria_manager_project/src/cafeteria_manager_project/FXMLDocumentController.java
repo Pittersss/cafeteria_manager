@@ -7,6 +7,8 @@ package cafeteria_manager_project;
 
 import Models.ProdutoDAO;
 import Models.Produto;
+import Models.ProdutosVendidos;
+import Models.ProdutosVendidosDAO;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.SQLException;
@@ -131,10 +133,13 @@ public class FXMLDocumentController implements Initializable {
             colQuantidade.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
             try { 
                 ProdutoDAO dao = new ProdutoDAO();
-                dao.ListarProdutos();
+                dao.CarregarProdutos();
                 ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutoDAO().getProdutos());
-                System.out.println(produtos.size());
                 PreencherTabela();
+                PreencherOpcoesCaixa();
+                ProdutosVendidosDAO vendidosDao = new ProdutosVendidosDAO();
+                vendidosDao.CarregarProdutosVendidos();
+                PreencherProdutosVendidos();
             } catch (ParseException | SQLException ex) {
                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -213,8 +218,20 @@ public class FXMLDocumentController implements Initializable {
     private void PreencherProdutosVendidos() throws SQLException
     {
         try{
-            ObservableList<String> produtosVendidos = FXCollections.observableArrayList(new ProdutoDAO().getProdutosVendidos());
-            listaProdutosVendidos.setItems(produtosVendidos);
+            ObservableList<ProdutosVendidos> produtosVendidos = FXCollections.observableArrayList(new ProdutosVendidosDAO().getProdutosVendidos());
+            ObservableList<String> listaAuxiliar = FXCollections.observableArrayList();
+            for (ProdutosVendidos p: produtosVendidos)
+            {
+              String valores = "";
+              valores += p.getId() + " - ";
+              valores += p.getNome() + " - ";
+              valores += "R$" + p.getValor() + " - ";
+              valores += p.getData();
+              listaAuxiliar.add(valores);
+              System.out.println(valores);
+              
+            }
+            listaProdutosVendidos.setItems(listaAuxiliar);
         }
         catch(NullPointerException e)
         {
@@ -363,7 +380,18 @@ public class FXMLDocumentController implements Initializable {
                {
                   if (comprados.get(j).substring(0, fimIndex).equals(idProduto))
                   { 
-                     new ProdutoDAO().AdicionarProdutoVendido(comprados.get(i) + " - " + dataHoje);
+                     String valor = comprados.get(i) + " - " + dataHoje;
+                     new ProdutoDAO().AdicionarProdutoVendido(valor);
+                     String[] valores = new ProdutosVendidos().SepararValores(valor);
+                     
+                     ProdutosVendidos produtoVendido = new ProdutosVendidos();
+                     produtoVendido.setId(Integer.parseInt(valores[0]));
+                     produtoVendido.setNome(valores[1]);
+                     BigDecimal b = new BigDecimal(valores[2]);
+                     produtoVendido.setValor(b);
+                     produtoVendido.setData(valores[3]);
+                     
+                     new ProdutosVendidosDAO().AdicionarProdutoVendido(produtoVendido);
                   }
                }
                contados.add(idProduto);

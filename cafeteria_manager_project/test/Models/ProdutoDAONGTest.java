@@ -89,6 +89,16 @@ public class ProdutoDAONGTest {
           System.out.println(c.getNome());
       }
     }
+    @Test (enabled=false)
+    public void ListarVendidosTest() throws SQLException
+    {
+      ProdutosVendidosDAO dao = new ProdutosVendidosDAO();
+      
+      for(ProdutosVendidos p: dao.getProdutosVendidos())
+      {
+          System.out.println(p.getNome());
+      }
+    }
     @Test(enabled=false)
     public void ApagarTest() throws SQLException
     {
