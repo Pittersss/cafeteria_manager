@@ -6,6 +6,44 @@
 .list-cell {
     -fx-font-size: 1.5em ;
 }
+.tab-pane 
+{
+-fx-skin: "com.sun.javafx.scene.control.skin.TabPaneSkin";
+/* -fx-tab-min-width: 4.583em;  55 */
+/* -fx-tab-max-width: 4.583em; 55 */
+-fx-tab-min-height: 2em; /* 24 */
+-fx-tab-max-height: 2em; /* 24 */
+}
+.tab .tab-label 
+{
+-fx-skin: "com.sun.javafx.scene.control.skin.LabelSkin";
+-fx-background-color: transparent;    
+-fx-alignment: CENTER;
+-fx-text-fill: -fx-text-base-color;
+-fx-font-weight:bold;
+}
+/*
+.tab *.tab-label Text {
+-fx-effect: dropshadow(two-pass-box , rgba(255, 255, 255, 0.4), 1, 0.0 , 0, 1);
+}*/
+.tab-content-area 
+{
+-fx-padding: 0.0em; /* 0 */
+/* -fx-opacity: -fx-disabled-opacity;*/
+}
+.tab 
+{
+/* This is how it is done in Button, but the -1 inset caused a white line  */
+/* to appear beneath the tab, which looks bad, so it's taken out below.    */
+/*    -fx-background-color: -fx-shadow-highlight-color, -fx-tab-border-color, -fx-inner-border, -fx-body-color;
+-fx-background-radius: 5 5 0 0, 5 5 0 0, 4 4 0 0, 3 3 0 0;
+-fx-background-insets: 0 0 -1 0, 0, 1, 2;*/
+-fx-background-insets: 0, 1, 2;
+-fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
+-fx-padding: 0.083333em 0.5em 0.083333em 0.5em; /* 1 6 1 6 */
+/*    -fx-text-fill: -fx-text-base-color;*/
+}
+
 
 
 

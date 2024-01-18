@@ -5,6 +5,7 @@
  */
 package cafeteria_manager_project;
 
+import Models.AdminDAO;
 import Models.ProdutoDAO;
 import Models.Produto;
 import Models.ProdutosVendidos;
@@ -118,6 +119,10 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TextField txtValorNoCaixa;
     @FXML
+    private TextField txtInvestimentoTotal;
+    @FXML
+    private TextField txtCustosEstoque;
+    @FXML
     private DatePicker dataValidade;
    
     
@@ -140,6 +145,8 @@ public class FXMLDocumentController implements Initializable {
                 ProdutosVendidosDAO vendidosDao = new ProdutosVendidosDAO();
                 vendidosDao.CarregarProdutosVendidos();
                 PreencherProdutosVendidos();
+                AdminDAO adminDao = new AdminDAO();
+                adminDao.CarregarValores(txtInvestimentoTotal, txtValorNoCaixa, txtCustosEstoque, txtLucrosMensais);
             } catch (ParseException | SQLException ex) {
                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -228,7 +235,6 @@ public class FXMLDocumentController implements Initializable {
               valores += "R$" + p.getValor() + " - ";
               valores += p.getData();
               listaAuxiliar.add(valores);
-              System.out.println(valores);
               
             }
             listaProdutosVendidos.setItems(listaAuxiliar);
@@ -261,9 +267,7 @@ public class FXMLDocumentController implements Initializable {
             p.setNome(txtNome.getText().toUpperCase());
             p.setValidade(dataValidade.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             p.setQuantidade(Integer.parseInt(txtQuantidade.getText()));
-            System.out.println(p.getId());
             new ProdutoDAO().AdicionarProduto(p);
-            System.out.println(p.getId());
             PreencherOpcoesCaixa();
             PreencherTabela();
             LimparCampos();
@@ -276,6 +280,8 @@ public class FXMLDocumentController implements Initializable {
         ObservableList<Produto> produtos = FXCollections.observableArrayList(new ProdutoDAO().getProdutos());
         if (!lbId.getText().isEmpty())
         {
+        int inicio = 0;
+        int fim = produtos.size()-1;
         for(int i = 0; i < produtos.size(); i++)
         {
           if (produtos.get(i).getId() == Integer.parseInt(lbId.getText()))
@@ -285,6 +291,9 @@ public class FXMLDocumentController implements Initializable {
               produtos.get(i).setValor(valorVenda);
               produtos.get(i).setQuantidade(Integer.parseInt(txtQuantidade.getText()));
               produtos.get(i).setValidade(dataValidade.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+              
+              ProdutoDAO dao = new ProdutoDAO();
+              dao.EditarProduto(produtos.get(i));
               
               tabelaProduto.refresh();
               lbId.setText("");
@@ -301,7 +310,6 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void RemoverEClicked(ActionEvent event) throws ParseException, SQLException {
         ProdutoDAO produtos = new ProdutoDAO();
-        System.out.println(produtos.getProdutos().size());
         for(int i = produtos.getProdutos().size()-1; i >= 0; i--)
         {
           if (produtos.getProdutos().get(i).getId() ==  Integer.parseInt(lbId.getText()))
@@ -359,7 +367,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void RegistrarCClicked(ActionEvent event) {
+    private void RegistrarCClicked(ActionEvent event) throws SQLException {
        try
        {
        Float.parseFloat(txtRecebido.getText());
@@ -382,11 +390,11 @@ public class FXMLDocumentController implements Initializable {
                   { 
                      String valor = comprados.get(i) + " - " + dataHoje;
                      new ProdutoDAO().AdicionarProdutoVendido(valor);
-                     String[] valores = new ProdutosVendidos().SepararValores(valor);
-                     
+                     String[] valores = new ProdutosVendidos().SepararValores(valor);  
                      ProdutosVendidos produtoVendido = new ProdutosVendidos();
                      produtoVendido.setId(Integer.parseInt(valores[0]));
                      produtoVendido.setNome(valores[1]);
+                     System.out.println(valores[2]);
                      BigDecimal b = new BigDecimal(valores[2]);
                      produtoVendido.setValor(b);
                      produtoVendido.setData(valores[3]);
@@ -395,7 +403,7 @@ public class FXMLDocumentController implements Initializable {
                   }
                }
                contados.add(idProduto);
-               tabelaProduto.refresh();               
+               tabelaProduto.refresh();              
            }   
            else
            {
@@ -406,20 +414,30 @@ public class FXMLDocumentController implements Initializable {
        PreencherProdutosVendidos();
        listaCompras.getItems().clear();
        txtValorNoCaixa.setText(String.valueOf((Float.parseFloat((txtValorNoCaixa.getText())) + Float.parseFloat(txtRecebido.getText())) - Float.parseFloat(txtTroco.getText().substring(2))));
-       txtLucrosMensais.setText(String.valueOf(Float.parseFloat(txtLucrosMensais.getText()) + Float.parseFloat(txtValorNoCaixa.getText())));
+       txtLucrosMensais.setText(txtValorNoCaixa.getText());
        txtValorTotal.setText("R$ 0");
        txtRecebido.setText("");
        txtTroco.setText("R$ 0");
        new ProdutoDAO().limparProdutos();
+       
+       BigDecimal investimentoTotal = new BigDecimal(txtInvestimentoTotal.getText());
+       BigDecimal valorCaixa = new BigDecimal(txtValorNoCaixa.getText());
+       BigDecimal custosMensais = new BigDecimal(txtCustosEstoque.getText());
+       BigDecimal lucrosMensais = new BigDecimal(txtLucrosMensais.getText());
+       
+       new AdminDAO().SalvarValores(investimentoTotal, valorCaixa, custosMensais, lucrosMensais);
        PreencherCompras();
        PreencherOpcoesCaixa();
        }
-       catch (Exception ex)
+       catch(Exception ex)
        {
         Alert a = new Alert(AlertType.ERROR);
-        a.setContentText("DIGITE OS DADOS CORRETAMENTE");
-        a.show();
-       }    
+        a.setContentText("DIGITE OS DADOS CORRETAMENTE ");
+        a.show();  
+       }
+       
+        
+          
     }
     @FXML
     private void GetValorRecebidoC(ActionEvent event) 
@@ -490,7 +508,7 @@ public class FXMLDocumentController implements Initializable {
         
         if (resultText == "OK")
             {
-             //Código do Banco de Dados 
+             //Código do Banco de Dados
             }
         }
         });
@@ -625,6 +643,40 @@ public class FXMLDocumentController implements Initializable {
         a.show();
         return false;
       }
+    }
+    private BigDecimal BigDecimalConverter(String valor)
+    {
+        BigDecimal numero = new BigDecimal(valor);
+        return numero;
+        
+    }
+    private void SalvarValoresAdmin() throws SQLException
+    {
+      AdminDAO dao = new AdminDAO(); 
+      dao.SalvarValores(BigDecimalConverter(txtInvestimentoTotal.getText()),
+              BigDecimalConverter(txtValorNoCaixa.getText()),
+              BigDecimalConverter(txtCustosEstoque.getText()),
+              BigDecimalConverter(txtLucrosMensais.getText()));  
+    }
+    @FXML
+    private void InsvestChange(ActionEvent event) throws SQLException
+    {
+      SalvarValoresAdmin();
+    }
+    @FXML
+    private void CaixaValueChange(ActionEvent event) throws SQLException
+    {
+      SalvarValoresAdmin();
+    }
+    @FXML
+    private void ValueEstoqueChange(ActionEvent event) throws SQLException
+    {
+      SalvarValoresAdmin();  
+    }
+    @FXML
+    private void LucrosChange(ActionEvent event) throws SQLException
+    {
+      SalvarValoresAdmin();  
     }
     
 }

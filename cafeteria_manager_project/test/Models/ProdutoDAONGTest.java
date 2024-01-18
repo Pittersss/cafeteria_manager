@@ -106,5 +106,11 @@ public class ProdutoDAONGTest {
       int id = 0;
       System.out.println(dao.ApagarProduto(id));
     }
+    @Test(enabled=false)
+    public void updateAdminTest() throws SQLException
+    {
+      AdminDAO dao = new AdminDAO();
+      dao.SalvarValores(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+    }
     
 }
